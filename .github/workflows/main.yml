@@ -1,0 +1,100 @@
+name: COMPILAR APK MINERADOR TIMEMANIA V2
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Configurar Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Conferir estrutura
+        shell: bash
+        run: |
+          echo "======================================"
+          echo "MINERADOR TIMEMANIA V2"
+          echo "======================================"
+
+          echo "RAIZ DO PROJETO"
+          pwd
+          ls -la
+
+          echo "======================================"
+          echo "ARQUIVOS JAVA"
+          echo "======================================"
+          find app/src/main/java -type f -name "*.java" -print | sort
+
+          echo "======================================"
+          echo "MAIN ACTIVITY"
+          echo "======================================"
+          find app/src/main/java -name "MainActivity.java" -print
+
+          echo "======================================"
+          echo "MOTOR DO MINERADOR"
+          echo "======================================"
+          find app/src/main/java -name "MiningEngine.java" -print
+
+          echo "======================================"
+          echo "LEITOR DE RESULTADOS"
+          echo "======================================"
+          find app/src/main/java -name "TimemaniaParser.java" -print
+
+          echo "======================================"
+          echo "ÍCONE PERSONALIZADO"
+          echo "======================================"
+          find app/src/main/res -name "ic_timemania.xml" -print
+
+      - name: Compilar APK
+        shell: bash
+        run: |
+          gradle --no-daemon clean :app:assembleDebug --stacktrace
+
+      - name: Localizar APK
+        shell: bash
+        run: |
+          echo "======================================"
+          echo "APK GERADO"
+          echo "======================================"
+          find app/build/outputs/apk -type f -name "*.apk" -print
+
+      - name: Preparar APK final
+        shell: bash
+        run: |
+          mkdir -p apk-final
+
+          APK=$(find app/build/outputs/apk/debug -type f -name "*.apk" | head -1)
+
+          if [ -z "$APK" ]; then
+            echo "ERRO: APK NÃO ENCONTRADO"
+            exit 1
+          fi
+
+          cp "$APK" apk-final/MINERADOR-TIMEMANIA-V2.apk
+
+          echo "APK FINAL:"
+          ls -lh apk-final/
+
+      - name: Salvar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MINERADOR-TIMEMANIA-V2-APK
+          path: apk-final/MINERADOR-TIMEMANIA-V2.apk
+          if-no-files-found: error
+          retention-days: 30
