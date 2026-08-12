@@ -1,0 +1,20 @@
+MINERADOR TIMEMANIA FUTURO — V2 DASHBOARD
+
+CORREÇÃO VISUAL
+- removida a tela crua do Android;
+- ícone próprio verde/amarelo;
+- cabeçalho profissional;
+- cards por módulo;
+- progresso visível;
+- resultados em painel;
+- botão PDF em cada módulo;
+- identidade visual verde + amarelo.
+
+MÓDULOS MANTIDOS
+1. Minerador Geral
+2. 3 Duplas Populares
+3. Minerador de Grupo 10 a 40
+
+MOTOR
+O motor foi preservado. A mudança principal desta versão é a interface e organização.
+Estudo estatístico; não garante premiação.
